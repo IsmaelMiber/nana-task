@@ -16,7 +16,7 @@ function Splash(props) {
   useEffect(() => {
     startAnimation();
     var unsubscribe = store.subscribe(() => {
-      var state = store.getState();
+      var state = store.getState(); 
       if (state.error.length == 0) {
         goToProducts();
         unsubscribe();
