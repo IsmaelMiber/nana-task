@@ -13,32 +13,36 @@ import styles from "./styles";
 import HighToLowSvg from "../../../assets/images/icons/highToLow.svg";
 import LowToHighSvg from "../../../assets/images/icons/lowToHigh.svg";
 import OriginalSortSvg from "../../../assets/images/icons/normal.svg";
-import { connect } from "react-redux";
-import { setError } from "../../redux/actions/error";
+import { useSelector, useDispatch } from "react-redux";
+import { setError, resetError } from "../../redux/actions/error";
 import ErrorMessageViewer from "../../components/ErrorMessageViewer";
 
 function Product(props) {
   var { width } = useWindowDimensions();
-  const SLIDER_ITEM_WIDTH = width - 32;
+  const SLIDER_ITEM_WIDTH = Math.round(width - 32);
 
-  var { route = {}, error } = props;
+  var error = useSelector(state => state.error);
+  var dispatch = useDispatch();
+
+  var { route = {} } = props;
   var { params = {} } = route;
   var { id, price } = params;
+
   var [productDetails, setProductDetails] = useState({});
   var [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    var { setError } = props;
     fetchProductDetails();
 
     async function fetchProductDetails() {
       var response = await getProduct(id);
 
       if (typeof response == "string") {
-        setError(response);
+        dispatch(setError(response));
       } else {
         setProductDetails(response);
         setLoading(false);
+        dispatch(resetError());
       }
     }
   }, []);
@@ -127,15 +131,15 @@ function Product(props) {
   return (
     <ScrollView
       style={[styles.container]}
-      contentContainerStyle={loading ? [{ flex: 1 }, styles.center] : null}
+      contentContainerStyle={
+        loading || error.length > 0 ? [{ flex: 1 }, styles.center] : null
+      }
     >
-      {loading ? (
-        error.length > 0 ? (
-          <ErrorMessageViewer />
-        ) : (
-          <ActivityIndicator />
-        )
-      ) : (
+      {loading && error.length == 0 ? <ActivityIndicator /> : null}
+
+      {error.length > 0 ? <ErrorMessageViewer /> : null}
+
+      {!loading && error.length == 0 ? (
         <View>
           <View style={styles.sliderContainer}>
             <FlatList
@@ -145,9 +149,16 @@ function Product(props) {
               pagingEnabled
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
-              onScrollEndDrag={e => {
-                var { targetContentOffset } = e.nativeEvent;
-                setSliderItem(targetContentOffset.x / SLIDER_ITEM_WIDTH);
+              onScroll={e => {
+                var { contentOffset } = e.nativeEvent;
+                var offset = Math.round(contentOffset.x);
+                if (
+                  offset >= 0 &&
+                  offset <= (pictures.length - 1) * SLIDER_ITEM_WIDTH
+                ) {
+                  let itemIndex = offset / SLIDER_ITEM_WIDTH;
+                  setSliderItem(itemIndex);
+                }
               }}
               keyExtractor={(item, index) => "key" + index}
             />
@@ -190,24 +201,9 @@ function Product(props) {
             </View>
           ) : null}
         </View>
-      )}
+      ) : null}
     </ScrollView>
   );
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    setError: error => dispatch(setError(error)),
-  };
-}
-
-function mapStateToProps(state, ownProps) {
-  return {
-    error: state.error,
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Product);
+export default Product;

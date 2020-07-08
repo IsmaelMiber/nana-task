@@ -1,9 +1,9 @@
 import React from "react";
 import { Text } from "react-native";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 function ErrorMessageViewer(props) {
-  var { error } = props;
+  var error = useSelector(state => state.error);
   var message;
   if (error == "network_error") {
     message = "please, check your connection...";
@@ -15,10 +15,4 @@ function ErrorMessageViewer(props) {
   return <Text>{message}</Text>;
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    error: state.error,
-  };
-}
-
-export default connect(mapStateToProps)(ErrorMessageViewer);
+export default ErrorMessageViewer;

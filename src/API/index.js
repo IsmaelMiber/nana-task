@@ -7,14 +7,16 @@ const API_SINGLE_PRODUCT = API_BASE_URL + "productDetails/";
 
 async function getProducts() {
   try {
-    var response = await axios.get(API_PRODUCTS);
+    var response = await axios.get(API_PRODUCTS, {
+      timeout: 5000,
+    });
     var { status, data } = response;
     if (status == 200) {
       return data || [];
     }
   } catch (error) {
     var errorMessage = JSON.parse(JSON.stringify(error)).message;
-    if (errorMessage == "Network Error") {
+    if (errorMessage == "Network Error" || errorMessage.includes("timeout")) {
       return "network_error";
     } else {
       if (errorMessage == "Request failed with status code 404") {
@@ -27,14 +29,16 @@ async function getProducts() {
 
 async function getProduct(id) {
   try {
-    var response = await axios.get(API_SINGLE_PRODUCT + id);
+    var response = await axios.get(API_SINGLE_PRODUCT + id, {
+      timeout: 5000,
+    });
     var { status, data } = response;
     if (status == 200) {
       return data || {};
     }
   } catch (error) {
     var errorMessage = JSON.parse(JSON.stringify(error)).message;
-    if (errorMessage == "Network Error") {
+    if (errorMessage == "Network Error" || errorMessage.includes("timeout")) {
       return "network_error";
     } else {
       if (errorMessage == "Request failed with status code 404") {

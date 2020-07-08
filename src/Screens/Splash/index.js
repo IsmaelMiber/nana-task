@@ -2,26 +2,26 @@ import React, { useState, useEffect } from "react";
 import { View, Image, Animated } from "react-native";
 import styles from "./styles";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { connect } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
 import { resetError } from "../../redux/actions/error";
-import store from "../../redux/store";
 
 const logo = require("../../../assets/images/logo.png");
 
 function Splash(props) {
-  var { resetError } = props;
+  var dispatch = useDispatch();
+  var store = useStore();
   var navigation = useNavigation();
   var [scaling] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    startAnimation();
     var unsubscribe = store.subscribe(() => {
-      var state = store.getState(); 
+      var state = store.getState();
       if (state.error.length == 0) {
-        goToProducts();
+        startAnimation();
         unsubscribe();
       }
     });
+    dispatch(resetError());
   }, []);
 
   function startAnimation() {
@@ -35,7 +35,7 @@ function Splash(props) {
 
   function onAnimationEnd({ finished }) {
     if (finished) {
-      resetError();
+      goToProducts();
     }
   }
 
@@ -43,7 +43,7 @@ function Splash(props) {
     navigation.dispatch(
       CommonActions.reset({
         index: 1,
-        routes: [{ name: "SettingScreen" }],
+        routes: [{ name: "ProductsScreen" }],
       }),
     );
   }
@@ -63,13 +63,5 @@ function Splash(props) {
   );
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    resetError: () => dispatch(resetError()),
-  };
-}
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(Splash);
+export default Splash;

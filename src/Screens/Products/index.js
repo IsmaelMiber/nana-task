@@ -6,19 +6,22 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import AdvancedImage from "../../components/AdvancedImage";
 import styles from "./styles";
-import { setError } from "../../redux/actions/error";
+import { setError, resetError } from "../../redux/actions/error";
 import { getProducts } from "../../API";
 import ErrorMessageViewer from "../../components/ErrorMessageViewer";
 
 function Products(props) {
-  var { setError, error } = props;
+  var error = useSelector(state => state.error);
+  var dispatch = useDispatch();
+
   var navigation = useNavigation();
   var [products, setProducts] = useState([]);
   var [loading, setLoading] = useState(true);
+
   //get product that has name as it is essantialy thing about any product regardless the price or photo
   products = products.filter(({ name }) => name);
   useEffect(() => {
@@ -28,10 +31,11 @@ function Products(props) {
       var response = await getProducts();
 
       if (typeof response == "string") {
-        setError(response);
+        dispatch(setError(response));
       } else {
         setProducts(response);
         setLoading(false);
+        dispatch(resetError());
       }
     }
   }, []);
@@ -56,15 +60,19 @@ function Products(props) {
       </TouchableOpacity>
     );
   }
+
   return (
-    <View style={[styles.container, loading ? styles.center : null]}>
-      {loading ? (
-        error.length > 0 ? (
-          <ErrorMessageViewer />
-        ) : (
-          <ActivityIndicator />
-        )
-      ) : (
+    <View
+      style={[
+        styles.container,
+        loading || error.length > 0 ? styles.center : null,
+      ]}
+    >
+      {loading && error.length == 0 ? <ActivityIndicator /> : null}
+
+      {error.length > 0 ? <ErrorMessageViewer /> : null}
+
+      {!loading && error.length == 0 ? (
         <FlatList
           data={products}
           renderItem={renderItem}
@@ -72,24 +80,9 @@ function Products(props) {
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => "key" + item.id}
         />
-      )}
+      ) : null}
     </View>
   );
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    error: state.error,
-  };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    setError: error => dispatch(setError(error)),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Products);
+export default Products;

@@ -24,7 +24,7 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="SplashScreen" headerMode="none">
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            <Stack.Screen name="SettingScreen" component={ProductsScreen} />
+            <Stack.Screen name="ProductsScreen" component={ProductsScreen} />
             <Stack.Screen name="ProductScreen" component={ProductScreen} />
           </Stack.Navigator>
         </NavigationContainer>
