@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, Animated } from "react-native";
-import styles from "./styles";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useDispatch, useStore } from "react-redux";
 import { resetError } from "../../redux/actions/error";
+import getStyle from "./styles";
 
 const logo = require("../../../assets/images/logo.png");
 
 function Splash(props) {
+  var styles = getStyle();
   var dispatch = useDispatch();
   var store = useStore();
   var navigation = useNavigation();
@@ -62,6 +63,5 @@ function Splash(props) {
     </View>
   );
 }
-
 
 export default Splash;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Image, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Image, Text, ActivityIndicator } from "react-native";
+import getStyle from "./styles";
 
 function AdvancedImage({
   uri,
@@ -9,11 +10,12 @@ function AdvancedImage({
   activityIndicatorProps = {},
   ...imageProps
 }) {
+  var styles = getStyle();
   var [loading, setLoading] = useState(true);
   var [showAlternateText, setAlternateText] = useState(false);
 
   var {
-    size = "small",
+    size = "large",
     style: activityIndicatorStyle,
     color: activityIndicatorColor,
   } = activityIndicatorProps;
@@ -48,21 +50,5 @@ function AdvancedImage({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  img: {
-    width: "100%",
-    height: "100%",
-  },
-  productImgContainer: {
-    width: "100%",
-    height: 300,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  fly: {
-    position: "absolute",
-  },
-});
 
 export default React.memo(AdvancedImage);

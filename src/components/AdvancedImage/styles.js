@@ -2,21 +2,20 @@ import { StyleSheet } from "react-native";
 import Responsive from "../../utils/Responsive";
 
 function getStyle() {
-  var { calcWidth } = Responsive;
+  var { calcHeight } = Responsive;
   return StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
+    img: {
+      width: "100%",
+      height: "100%",
+    },
+    productImgContainer: {
+      width: "100%",
+      height: calcHeight(300),
       justifyContent: "center",
       alignItems: "center",
     },
-    img: {
-      height: "100%",
-      width: "100%",
-    },
-    logoContainer: {
-      width: calcWidth(200),
-      height: calcWidth(200),
+    fly: {
+      position: "absolute",
     },
   });
 }

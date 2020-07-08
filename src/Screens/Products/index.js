@@ -9,12 +9,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import AdvancedImage from "../../components/AdvancedImage";
-import styles from "./styles";
+import getStyle from "./styles";
 import { setError, resetError } from "../../redux/actions/error";
 import { getProducts } from "../../API";
 import ErrorMessageViewer from "../../components/ErrorMessageViewer";
 
 function Products(props) {
+  var styles = getStyle();
   var error = useSelector(state => state.error);
   var dispatch = useDispatch();
 
@@ -54,8 +55,8 @@ function Products(props) {
       >
         <AdvancedImage uri={photo} alternateText={name} resizeMode="contain" />
         <View style={styles.productDetails}>
-          {name ? <Text>{name}</Text> : null}
-          {price ? <Text>{`${price}$`}</Text> : null}
+          {name ? <Text style={styles.nameText}>{name}</Text> : null}
+          {price ? <Text style={styles.priceText}>{`${price}$`}</Text> : null}
         </View>
       </TouchableOpacity>
     );
@@ -68,7 +69,7 @@ function Products(props) {
         loading || error.length > 0 ? styles.center : null,
       ]}
     >
-      {loading && error.length == 0 ? <ActivityIndicator /> : null}
+      {loading && error.length == 0 ? <ActivityIndicator size="large" /> : null}
 
       {error.length > 0 ? <ErrorMessageViewer /> : null}
 

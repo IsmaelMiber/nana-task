@@ -9,17 +9,19 @@ import {
 import { getProduct } from "../../API";
 import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import AdvancedImage from "../../components/AdvancedImage";
-import styles from "./styles";
+import getStyle from "./styles";
 import HighToLowSvg from "../../../assets/images/icons/highToLow.svg";
 import LowToHighSvg from "../../../assets/images/icons/lowToHigh.svg";
 import OriginalSortSvg from "../../../assets/images/icons/normal.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { setError, resetError } from "../../redux/actions/error";
 import ErrorMessageViewer from "../../components/ErrorMessageViewer";
+import Responsive from "../../utils/Responsive";
 
 function Product(props) {
+  var styles = getStyle();
   var { width } = useWindowDimensions();
-  const SLIDER_ITEM_WIDTH = Math.round(width - 32);
+  const SLIDER_ITEM_WIDTH = Math.round(width - Responsive.calcWidth(32));
 
   var error = useSelector(state => state.error);
   var dispatch = useDispatch();
@@ -114,11 +116,26 @@ function Product(props) {
   function renderSortIcon() {
     switch (sortType) {
       case "normal":
-        return <OriginalSortSvg width={25} height={25} />;
+        return (
+          <OriginalSortSvg
+            width={Responsive.calcWidth(25)}
+            height={Responsive.calcWidth(25)}
+          />
+        );
       case "high":
-        return <HighToLowSvg width={25} height={25} />;
+        return (
+          <HighToLowSvg
+            width={Responsive.calcWidth(25)}
+            height={Responsive.calcWidth(25)}
+          />
+        );
       case "low":
-        return <LowToHighSvg width={25} height={25} />;
+        return (
+          <LowToHighSvg
+            width={Responsive.calcWidth(25)}
+            height={Responsive.calcWidth(25)}
+          />
+        );
     }
   }
 
@@ -135,7 +152,7 @@ function Product(props) {
         loading || error.length > 0 ? [{ flex: 1 }, styles.center] : null
       }
     >
-      {loading && error.length == 0 ? <ActivityIndicator /> : null}
+      {loading && error.length == 0 ? <ActivityIndicator size="large" /> : null}
 
       {error.length > 0 ? <ErrorMessageViewer /> : null}
 
@@ -166,8 +183,8 @@ function Product(props) {
           </View>
 
           <View style={[styles.row, styles.productDetails]}>
-            <Text>{name}</Text>
-            <Text>{price}</Text>
+            <Text style={styles.nameText}>{name}</Text>
+            <Text style={styles.nameText}>{price}</Text>
           </View>
 
           {reviews.length > 0 ? (
@@ -186,7 +203,7 @@ function Product(props) {
                     style={[styles.row, styles.reviewContainer]}
                   >
                     <View style={styles.scoreCircle}>
-                      <Text>{score}</Text>
+                      <Text style={styles.scoreText}>{score}</Text>
                     </View>
                     <Text style={styles.reviewText}>{review}</Text>
                   </View>
@@ -194,8 +211,8 @@ function Product(props) {
               })}
 
               {reviewsCountToShow != reviews.length ? (
-                <TouchableOpacity onPress={showMoreReviews}>
-                  <Text>Show More</Text>
+                <TouchableOpacity style={styles.moreBtn} onPress={showMoreReviews}>
+                  <Text style={styles.showMoreText}>Show More</Text>
                 </TouchableOpacity>
               ) : null}
             </View>
