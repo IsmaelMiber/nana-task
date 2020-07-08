@@ -25,10 +25,10 @@ function Products(props) {
 
   //get product that has name as it is essantialy thing about any product regardless the price or photo
   products = products.filter(({ name }) => name);
-  useEffect(() => {
-    fetchProductDetails();
+  useEffect(function componentDidMount() {
+    fetchProducts();
 
-    async function fetchProductDetails() {
+    async function fetchProducts() {
       var response = await getProducts();
 
       if (typeof response == "string") {

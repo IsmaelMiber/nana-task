@@ -14,7 +14,7 @@ function Splash(props) {
   var navigation = useNavigation();
   var [scaling] = useState(new Animated.Value(0));
 
-  useEffect(() => {
+  useEffect(function componentDidMount() {
     var unsubscribe = store.subscribe(() => {
       var state = store.getState();
       if (state.error.length == 0) {

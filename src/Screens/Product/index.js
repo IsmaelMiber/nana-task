@@ -33,7 +33,7 @@ function Product(props) {
   var [productDetails, setProductDetails] = useState({});
   var [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(function componentDidMount() {
     fetchProductDetails();
 
     async function fetchProductDetails() {
