@@ -73,7 +73,7 @@ function Products(props) {
 
       {error.length > 0 ? <ErrorMessageViewer /> : null}
 
-      {!loading && error.length == 0 ? (
+      {!loading && error.length == 0 && products && products.length > 0 ? (
         <FlatList
           data={products}
           renderItem={renderItem}

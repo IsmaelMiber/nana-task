@@ -158,33 +158,34 @@ function Product(props) {
 
       {!loading && error.length == 0 ? (
         <View>
-          <View style={styles.sliderContainer}>
-            <FlatList
-              horizontal
-              data={pictures}
-              renderItem={renderItem}
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              onScroll={e => {
-                var { contentOffset } = e.nativeEvent;
-                var offset = Math.round(contentOffset.x);
-                if (
-                  offset >= 0 &&
-                  offset <= (pictures.length - 1) * SLIDER_ITEM_WIDTH
-                ) {
-                  let itemIndex = offset / SLIDER_ITEM_WIDTH;
-                  setSliderItem(itemIndex);
-                }
-              }}
-              keyExtractor={(item, index) => "key" + index}
-            />
-            {renderListFooterComponent()}
-          </View>
-
+          {pictures && pictures.length > 0 ? (
+            <View style={styles.sliderContainer}>
+              <FlatList
+                horizontal
+                data={pictures}
+                renderItem={renderItem}
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                onScroll={e => {
+                  var { contentOffset } = e.nativeEvent;
+                  var offset = Math.round(contentOffset.x);
+                  if (
+                    offset >= 0 &&
+                    offset <= (pictures.length - 1) * SLIDER_ITEM_WIDTH
+                  ) {
+                    let itemIndex = offset / SLIDER_ITEM_WIDTH;
+                    setSliderItem(itemIndex);
+                  }
+                }}
+                keyExtractor={(item, index) => "key" + index}
+              />
+              {renderListFooterComponent()}
+            </View>
+          ) : null}
           <View style={[styles.row, styles.productDetails]}>
-            <Text style={styles.nameText}>{name}</Text>
-            <Text style={styles.nameText}>{price}</Text>
+            {name ? <Text style={styles.nameText}>{name}</Text> : null}
+            {price ? <Text style={styles.nameText}>{`${price} $`}</Text> : null}
           </View>
 
           {reviews.length > 0 ? (
@@ -202,16 +203,23 @@ function Product(props) {
                     key={index}
                     style={[styles.row, styles.reviewContainer]}
                   >
-                    <View style={styles.scoreCircle}>
-                      <Text style={styles.scoreText}>{score}</Text>
-                    </View>
-                    <Text style={styles.reviewText}>{review}</Text>
+                    {score ? (
+                      <View style={styles.scoreCircle}>
+                        <Text style={styles.scoreText}>{score}</Text>
+                      </View>
+                    ) : null}
+                    {review ? (
+                      <Text style={styles.reviewText}>{review}</Text>
+                    ) : null}
                   </View>
                 );
               })}
 
               {reviewsCountToShow != reviews.length ? (
-                <TouchableOpacity style={styles.moreBtn} onPress={showMoreReviews}>
+                <TouchableOpacity
+                  style={styles.moreBtn}
+                  onPress={showMoreReviews}
+                >
                   <Text style={styles.showMoreText}>Show More</Text>
                 </TouchableOpacity>
               ) : null}
