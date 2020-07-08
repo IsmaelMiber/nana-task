@@ -64,4 +64,4 @@ function Splash(props) {
   );
 }
 
-export default Splash;
+export default React.memo(Splash);

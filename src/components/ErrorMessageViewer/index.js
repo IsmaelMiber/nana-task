@@ -15,4 +15,4 @@ function ErrorMessageViewer(props) {
   return <Text>{message}</Text>;
 }
 
-export default ErrorMessageViewer;
+export default React.memo(ErrorMessageViewer);
