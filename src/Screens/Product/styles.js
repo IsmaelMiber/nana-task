@@ -1,19 +1,17 @@
 import { StyleSheet } from "react-native";
 import Responsive from "../../utils/Responsive";
+import getGlobalStyle from "../../styles/global";
 
 export default function getStyle() {
   var { calcWidth, calcHeight, calcFont } = Responsive;
   return StyleSheet.create({
+    ...getGlobalStyle(),
     container: {
       flex: 1,
       paddingHorizontal: Responsive.calcWidth(16),
     },
     row: {
       flexDirection: "row",
-      alignItems: "center",
-    },
-    center: {
-      justifyContent: "center",
       alignItems: "center",
     },
     sliderContainer: { alignItems: "center" },
@@ -47,13 +45,7 @@ export default function getStyle() {
     },
     reviewsTitle: {
       marginRight: calcWidth(10),
-      fontSize: calcFont(12)
-    },
-    nameText: {
-      fontSize: calcFont(15),
-    },
-    priceText: {
-      fontSize: calcFont(15),
+      fontSize: calcFont(12),
     },
     scoreText: {
       fontSize: calcFont(13),
@@ -68,7 +60,7 @@ export default function getStyle() {
       marginTop: calcHeight(10),
     },
     showMoreText: {
-      fontSize: calcFont(13)
-    }
+      fontSize: calcFont(13),
+    },
   });
 }

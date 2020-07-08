@@ -1,20 +1,14 @@
 import { StyleSheet } from "react-native";
 import Responsive from "../../utils/Responsive";
+import getGlobalStyle from "../../styles/global";
 
 export default function getStyle() {
-  var { calcWidth, calcHeight, calcFont } = Responsive;
+  var { calcWidth, calcHeight } = Responsive;
 
   return StyleSheet.create({
+    ...getGlobalStyle(),
     container: {
       flex: 1,
-    },
-    center: {
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    img: {
-      width: "100%",
-      height: "100%",
     },
     productContainer: {
       padding: calcWidth(16),
@@ -32,14 +26,5 @@ export default function getStyle() {
       justifyContent: "space-between",
       alignItems: "center",
     },
-    fly: {
-      position: "absolute",
-    },
-    nameText: {
-      fontSize: calcFont(15),
-    },
-    priceText: {
-      fontSize: calcFont(15),
-    }
   });
 }

@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
 import Responsive from "../../utils/Responsive";
+import getGlobalStyle from "../../styles/global";
 
 function getStyle() {
   var { calcWidth } = Responsive;
   return StyleSheet.create({
+    ...getGlobalStyle(),
     container: {
       flex: 1,
       backgroundColor: "#fff",
